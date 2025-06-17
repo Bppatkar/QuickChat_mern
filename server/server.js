@@ -25,7 +25,7 @@ export const userSocketMap = {}; //{userId:socketId}
 // Socket.io connection handler
 io.on('connection', (socket) => {
   const userId = socket.handshake.query.userId;
-  
+
   console.log(`User ${userId} connected`);
   if (userId) {
     userSocketMap[userId] = socket.id;
@@ -54,7 +54,12 @@ app.use('/api/messages', messageRoutes);
 // connecting to DB
 connectDB();
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
-});
+if (process.env.NODE_ENV === 'production') {
+  const PORT = process.env.PORT || 5000;
+  server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${process.env.PORT}`);
+  });
+}
+
+// export server for vercel
+export default server;
