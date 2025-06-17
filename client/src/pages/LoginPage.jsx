@@ -1,22 +1,35 @@
-import React, { useState } from 'react'
-import assets from '../assets/assets.js'
+import React, { useState, useContext } from 'react';
+import assets from '../assets/assets.js';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
-  const [currState, setCurrState] = useState('Sign up')
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [bio, setBio] = useState('')
-  const [isDataSubmitted, setIsDataSubmitted] = useState(false)
+  const navigate = useNavigate();
+  const [currState, setCurrState] = useState('Sign up');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [bio, setBio] = useState('');
+  const [isDataSubmitted, setIsDataSubmitted] = useState(false);
+
+  const { login } = useContext(AuthContext);
 
   const onSubmitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (currState === 'Sign up' && !isDataSubmitted) {
-      setIsDataSubmitted(true)
-      return
+      setIsDataSubmitted(true);
+      return;
     }
-  }
+    login(currState === 'Sign up' ? 'signup' : 'login', {
+      fullName,
+      email,
+      password,
+      bio,
+    }).then(() => {
+      navigate('/');
+    });
+  };
 
   return (
     <div className="min-h-screen bg-center bg-cover flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
@@ -99,8 +112,8 @@ const LoginPage = () => {
               Already have an account?{' '}
               <span
                 onClick={() => {
-                  setCurrState('Login')
-                  setIsDataSubmitted(false)
+                  setCurrState('Login');
+                  setIsDataSubmitted(false);
                 }}
                 className="text-violet-500 font-medium cursor-pointer"
               >
@@ -112,8 +125,8 @@ const LoginPage = () => {
               Don't have an account?{' '}
               <span
                 onClick={() => {
-                  setCurrState('Sign up')
-                  setIsDataSubmitted(false)
+                  setCurrState('Sign up');
+                  setIsDataSubmitted(false);
                 }}
                 className="text-violet-500 font-medium cursor-pointer"
               >
@@ -124,8 +137,7 @@ const LoginPage = () => {
         </div>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
-
+export default LoginPage;
