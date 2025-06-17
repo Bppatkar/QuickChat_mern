@@ -1,8 +1,32 @@
-import assets, { userDummyData } from '../assets/assets.js'
-import { useNavigate } from 'react-router-dom'
+import assets from '../assets/assets.js';
+import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { ChatContext } from '../context/ChatContext.jsx';
 
-const Sidebar = ({ selectedUser, setSelectedUser }) => {
-  const navigate = useNavigate()
+const Sidebar = () => {
+  const {
+    users,
+    selectedUser,
+    getUsers,
+    setSelectedUser,
+    unseenMessages,
+    setUnseenMessages,
+  } = useContext(ChatContext);
+  const { logout, onlineUsers } = useContext(AuthContext);
+  const [input, setInput] = useState(false);
+  const navigate = useNavigate();
+
+  const filteredUsers = input
+    ? users.filter((user) =>
+        user.fullName.toLowerCase().includes(input.toLowerCase())
+      )
+    : users;
+
+  useEffect(() => {
+    getUsers();
+  }, [onlineUsers]);
+
   return (
     <div
       className={`bg-[#8185b2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${
@@ -27,10 +51,7 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
                 Edit Profile
               </p>
               <hr className="my-2 border-t border-gray-500" />
-              <p
-                onClick={() => navigate('/logout')}
-                className="cursor-pointer text-sm"
-              >
+              <p onClick={() => logout()} className="cursor-pointer text-sm">
                 {' '}
                 Logout
               </p>
@@ -41,6 +62,7 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
         <div className="bg-[#282142] py-3 px-4 mt-5 rounded-md flex items-center gap-2">
           <img src={assets.search_icon} className="w-3" alt="search" />
           <input
+            onChange={(e) => setInput(e.target.value)}
             type="text"
             className="bg-transparent border-none outline-none text-white text-sm placeholder:[#c8c8c8] flex-1"
             placeholder="Search user..."
@@ -49,7 +71,7 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
       </div>
 
       <div className="flex flex-col">
-        {userDummyData.map((user, i) => (
+        {filteredUsers.map((user, i) => (
           <div
             key={i}
             onClick={() => setSelectedUser(user)}
@@ -64,22 +86,23 @@ const Sidebar = ({ selectedUser, setSelectedUser }) => {
             />
             <div className="flex flex-col leading-5">
               <p className="text-sm">{user.fullName}</p>
-              {i < 3 ? (
+              {onlineUsers.includes(user._id) ? (
                 <span className="text-green-400 text-sm">Online</span>
               ) : (
                 <span className="text-neutral-400 text-sm">Offline</span>
               )}
             </div>
-            {i > 2 && (
+            {unseenMessages[user._id] > 0 && (
               <p className="absolute right-4 top-4 text-sm h-5 w-5 flex items-center justify-center  rounded-full bg-violet-500/50">
-                {i}
+                {unseenMessages[user._id]}
               </p>
             )}
           </div>
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
+

@@ -25,6 +25,7 @@ export const userSocketMap = {}; //{userId:socketId}
 // Socket.io connection handler
 io.on('connection', (socket) => {
   const userId = socket.handshake.query.userId;
+  
   console.log(`User ${userId} connected`);
   if (userId) {
     userSocketMap[userId] = socket.id;
@@ -48,7 +49,7 @@ app.use('/api/status', (req, res) => {
   res.status(200).json({ message: 'Server is live..' });
 });
 app.use('/api/auth', userRoutes);
-app.use('/api/message', messageRoutes);
+app.use('/api/messages', messageRoutes);
 
 // connecting to DB
 connectDB();

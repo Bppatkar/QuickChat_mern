@@ -80,7 +80,7 @@ export const sendMessage = async (req, res) => {
   try {
     const { text, image } = req.body;
     const receiverId = req.params.id;
-    const senderId = req.user_id;
+    const senderId = req.user._id;
 
     let imageUrl;
     if (image) {
@@ -99,9 +99,12 @@ export const sendMessage = async (req, res) => {
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('newMessage', newMessage);
     }
-    res.json({ success: true, newMessage });
+    res.status(201).json({ success: true, newMessage });
   } catch (error) {
-    console.error(error.message);
-    res.json({ success: false, message: 'Error sending message' });
+    console.error('Error in sendMessage:', error.message);
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    res.status(500).json({ success: false, message: 'Error sending message' });
   }
 };
