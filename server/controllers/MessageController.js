@@ -41,8 +41,8 @@ export const getUsersForSidebar = async (req, res) => {
 export const getMessage = async (req, res) => {
   try {
     const { id: selectedUserId } = req.params;
-    const myId = req.user_id;
-    const message = await Message.find({
+    const myId = req.user._id;
+    const messages = await Message.find({
       $or: [
         { senderId: myId, receiverId: selectedUserId },
         { senderId: selectedUserId, receiverId: myId },
@@ -55,7 +55,7 @@ export const getMessage = async (req, res) => {
       },
       { seen: true }
     );
-    res.json({ success: true, message });
+    res.json({ success: true, messages });
   } catch (error) {
     console.error(error.message);
     res.json({ success: false, message: 'Error getting messages' });
@@ -65,13 +65,13 @@ export const getMessage = async (req, res) => {
 // api to mark message as seen using message id
 export const markMessageAsSeen = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { messageId } = req.params;
 
-    await Message.findOneAndUpdate(userId, { seen: true });
+    await Message.findOneAndUpdate(messageId, { seen: true });
     res.json({ success: true });
   } catch (error) {
     console.error(error.message);
-    res.json({ success: false, message: 'Error getting messages from params' });
+    res.json({ success: false, message: 'Error marking message as seen' });
   }
 };
 
@@ -108,3 +108,4 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error sending message' });
   }
 };
+
