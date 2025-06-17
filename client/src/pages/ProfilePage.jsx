@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import assets from '../assets/assets.js'
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import assets from '../assets/assets.js';
+import { AuthContext } from '../context/AuthContext.jsx';
 
 const ProfilePage = () => {
-  const [selectedImg, setSelectedImg] = React.useState(null)
-  const navigate = useNavigate()
-  const [name, setName] = useState('Martin Johnson')
-  const [bio, setBio] = useState('Hi Everyone, I am Using QuickChat')
+  const { authUser, updateProfile } = useContext(AuthContext);
+  const [selectedImg, setSelectedImg] = useState(null);
+  const navigate = useNavigate();
+  const [name, setName] = useState('Martin Johnson');
+  const [bio, setBio] = useState('Hi Everyone, I am Using QuickChat');
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    navigate('/')
-  }
+    e.preventDefault();
+    navigate('/');
+  };
 
   return (
     <div className="min-h-screen bg-no-repeat bg-cover flex items-center justify-center">
@@ -73,7 +75,7 @@ const ProfilePage = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;
