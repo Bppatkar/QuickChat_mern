@@ -11,8 +11,8 @@ export const signup = async (req, res) => {
         .status(400)
         .json({ message: 'Please enter all the fields', success: false });
     }
-    const user = await User.findOne({ email });
-    if (user) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res
         .status(400)
         .json({ message: 'User already exists', success: false });
@@ -28,7 +28,7 @@ export const signup = async (req, res) => {
 
     const token = generateToken(newUser._id);
 
-    return res.status(200).json({
+    return res.status(201).json({
       message: 'User created successfully',
       success: true,
       token,
@@ -51,27 +51,28 @@ export const login = async (req, res) => {
         .status(400)
         .json({ message: 'Please enter all the fields', success: false });
     }
-    const userData = await User.findOne({ email });
-    if (!userData) {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
       return res
-        .status(400)
+        .status(404)
         .json({ message: 'User does not exist', success: false });
     }
-    const isPasswordCorrect = await bcrypt.compare(password, userData.password);
+    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
     if (!isPasswordCorrect) {
       return res
         .status(400)
         .json({ message: 'Invalid credentials', success: false });
     }
-    const token = generateToken(userData._id);
+    const token = generateToken(existingUser._id);
     return res.status(200).json({
       message: 'User logged in successfully',
       success: true,
       token,
-      userData,
+      userData: existingUser,
     });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, message: 'Login failed' });
   }
 };
+
