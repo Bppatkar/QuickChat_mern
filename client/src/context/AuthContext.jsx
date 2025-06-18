@@ -23,13 +23,22 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       if (error.response?.status === 401) {
-        console.log('Not authenticated or token expired. Redirecting to login.');
+        console.log(
+          'Not authenticated or token expired. Redirecting to login.'
+        );
         setAuthUser(null);
         localStorage.removeItem('token');
         setToken(null);
       } else {
-        console.error('Check Auth Error:', error.response?.data?.message || error.message);
-        toast.error(error.response?.data?.message || error.message || 'Authentication check failed.');
+        console.error(
+          'Check Auth Error:',
+          error.response?.data?.message || error.message
+        );
+        toast.error(
+          error.response?.data?.message ||
+            error.message ||
+            'Authentication check failed.'
+        );
       }
     }
   };
@@ -49,7 +58,9 @@ export const AuthProvider = ({ children }) => {
         toast.error(data.message || 'Login failed.');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message || 'Login failed.');
+      toast.error(
+        error.response?.data?.message || error.message || 'Login failed.'
+      );
     }
   };
 
@@ -74,7 +85,11 @@ export const AuthProvider = ({ children }) => {
         toast.error(data.message || 'Profile update failed.');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message || 'Profile update failed.');
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          'Profile update failed.'
+      );
     }
   };
 
@@ -85,8 +100,11 @@ export const AuthProvider = ({ children }) => {
       query: { userId: userData._id },
       path: '/api/socket.io/',
       transports: ['websocket', 'polling'],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
+     
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -141,4 +159,3 @@ export const AuthProvider = ({ children }) => {
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

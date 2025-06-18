@@ -26,6 +26,7 @@ export const userSocketMap = {}; //{userId:socketId}
 
 // Socket.io connection handler
 io.on('connection', (socket) => {
+  console.log('WebSocket connection established');
   const userId = socket.handshake.query.userId;
 
   console.log(`User ${userId} connected`);
