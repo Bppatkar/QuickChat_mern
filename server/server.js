@@ -13,9 +13,16 @@ const server = http.createServer(app);
 
 // initializing socket.io
 export const io = new Server(server, {
-  cors: { origin: '*', credentials: true },
-  path: '/api/socket.io/',
+  cors: {
+    origin: [
+      'https://quick-chat-backend-ecru.vercel.app',
+      'http://localhost:5173',
+    ],
+    credentials: true,
+  },
+  path: '/socket.io/',
   transports: ['websocket', 'polling'],
+  allowEIO3: true,
 });
 
 //store online users

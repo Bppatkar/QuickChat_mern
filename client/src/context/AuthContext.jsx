@@ -107,30 +107,13 @@ export const AuthProvider = ({ children }) => {
     });
 
     newSocket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error);
+      console.error('Socket connection error:', error.message);
     });
 
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
       console.log('Socket Connected:', newSocket.id);
-    });
-
-    newSocket.on('getOnlineUsers', (userIds) => {
-      setOnlineUsers(userIds);
-    });
-
-    newSocket.on('connect_error', (err) => {
-      if (err.message.includes('websocket')) {
-        toast.error('Socket connection failed: websocket error');
-      } else {
-        console.error('Socket.IO connection error:', err.message);
-        toast.error(`Socket connection failed: ${err.message}`);
-      }
-    });
-
-    newSocket.on('disconnect', (reason) => {
-      console.log('Socket Disconnected:', reason);
     });
   };
 
