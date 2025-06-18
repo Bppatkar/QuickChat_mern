@@ -14,8 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [socket, setSocket] = useState(null);
 
-  //check if user is authenticated and if so, set the user data and connect the socket
-
   const checkAuth = async () => {
     try {
       const { data } = await axios.get('/api/auth/check');
@@ -25,27 +23,16 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       if (error.response?.status === 401) {
-        console.log(
-          'Not authenticated or token expired. Redirecting to login.'
-        );
+        console.log('Not authenticated or token expired. Redirecting to login.');
         setAuthUser(null);
         localStorage.removeItem('token');
-        setToken(null); // Clear token state as well
+        setToken(null);
       } else {
-        console.error(
-          'Check Auth Error:',
-          error.response?.data?.message || error.message
-        );
-        toast.error(
-          error.response?.data?.message ||
-            error.message ||
-            'Authentication check failed.'
-        );
+        console.error('Check Auth Error:', error.response?.data?.message || error.message);
+        toast.error(error.response?.data?.message || error.message || 'Authentication check failed.');
       }
     }
   };
-
-  // login function to handle user authentication and socket connection
 
   const login = async (state, credentials) => {
     try {
@@ -62,13 +49,9 @@ export const AuthProvider = ({ children }) => {
         toast.error(data.message || 'Login failed.');
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || error.message || 'Login failed.'
-      );
+      toast.error(error.response?.data?.message || error.message || 'Login failed.');
     }
   };
-
-  // logout function to handle user logout and socket disconnection
 
   const logout = async () => {
     localStorage.removeItem('token');
@@ -80,7 +63,6 @@ export const AuthProvider = ({ children }) => {
     socket?.disconnect();
     setSocket(null);
   };
-  // update profile function to handle user profile updates
 
   const updateProfile = async (body) => {
     try {
@@ -92,15 +74,9 @@ export const AuthProvider = ({ children }) => {
         toast.error(data.message || 'Profile update failed.');
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message ||
-          error.message ||
-          'Profile update failed.'
-      );
+      toast.error(error.response?.data?.message || error.message || 'Profile update failed.');
     }
   };
-
-  // connect sockets function to handle socket connection and online users updates
 
   const connectSocket = (userData) => {
     if (!userData || (socket && socket.connected)) return;
@@ -109,12 +85,8 @@ export const AuthProvider = ({ children }) => {
       query: { userId: userData._id },
       path: '/api/socket.io/',
       transports: ['websocket', 'polling'],
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      websocket: { version: 13 },
     });
 
-    // newSocket.connect();
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
@@ -126,8 +98,12 @@ export const AuthProvider = ({ children }) => {
     });
 
     newSocket.on('connect_error', (err) => {
-      console.error('Socket.IO connection error:', err.message);
-      toast.error(`Socket connection failed: ${err.message}`);
+      if (err.message.includes('websocket')) {
+        toast.error('Socket connection failed: websocket error');
+      } else {
+        console.error('Socket.IO connection error:', err.message);
+        toast.error(`Socket connection failed: ${err.message}`);
+      }
     });
 
     newSocket.on('disconnect', (reason) => {
@@ -146,7 +122,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  // Cleanup socket on component unmount
   useEffect(() => {
     return () => {
       if (socket) {
@@ -166,3 +141,4 @@ export const AuthProvider = ({ children }) => {
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
