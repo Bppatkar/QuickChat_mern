@@ -94,26 +94,29 @@ export const AuthProvider = ({ children }) => {
   };
 
   const connectSocket = (userData) => {
-    if (!userData || (socket && socket.connected)) return;
+    if (!userData) return;
 
-    const newSocket = io(backendUrl, {
-      query: { userId: userData._id },
-      path: '/api/socket.io/',
-      transports: ['websocket'],
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      forceNew: true,
+    const newSocket = io(import.meta.env.VITE_BACKEND_URL, {
+      path: '/socket.io/',
+      transports: ['polling', 'websocket'],
+      query: {
+        userId: userData._id,
+        EIO: '4',
+      },
+      reconnectionAttempts: 3,
+      reconnectionDelay: 2000,
+      timeout: 20000,
       withCredentials: true,
     });
 
     newSocket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error.message);
+      console.log('Connection Error:', error.message);
     });
 
     setSocket(newSocket);
 
-    newSocket.on('connect', () => {
-      console.log('Socket Connected:', newSocket.id);
+    newSocket.on('disconnect', (reason) => {
+      console.log('Socket disconnected:', reason);
     });
   };
 

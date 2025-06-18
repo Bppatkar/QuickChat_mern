@@ -18,11 +18,15 @@ export const io = new Server(server, {
       'https://quick-chat-backend-ecru.vercel.app',
       'http://localhost:5173',
     ],
+    methods: ['GET', 'POST'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
   },
   path: '/socket.io/',
-  transports: ['websocket', 'polling'],
+  transports: ['polling', 'websocket'],
   allowEIO3: true,
+  maxHttpBufferSize: 1e8,
+  pingTimeout: 60000,
 });
 
 //store online users
