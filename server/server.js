@@ -55,6 +55,12 @@ io.on('connection', (socket) => {
 });
 
 // middlewares
+app.use(
+  cors({
+    origin: 'https://quick-chat-backend-ecru.vercel.app',
+    credentials: true,
+  })
+);
 app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -77,3 +83,4 @@ if (process.env.NODE_ENV !== 'production') {
 
 // export server for vercel
 export default server;
+
