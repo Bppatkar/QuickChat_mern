@@ -111,6 +111,7 @@ export const AuthProvider = ({ children }) => {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      websocket: { version: 13 },
     });
 
     // newSocket.connect();
