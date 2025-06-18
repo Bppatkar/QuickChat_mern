@@ -104,11 +104,15 @@ export const AuthProvider = ({ children }) => {
 
   const connectSocket = (userData) => {
     if (!userData || (socket && socket.connected)) return;
+
     const newSocket = io(backendUrl, {
       query: { userId: userData._id },
       path: '/api/socket.io/',
       transports: ['websocket', 'polling'],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
+
     // newSocket.connect();
     setSocket(newSocket);
 
