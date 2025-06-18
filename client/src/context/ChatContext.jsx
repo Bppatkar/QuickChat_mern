@@ -22,7 +22,7 @@ export const ChatProvider = ({ children }) => {
       }
     } catch (error) {
       console.error(error.message);
-      toast.error(error.message);
+      toast.error(error.response?.data?.message || 'Failed to load users');
     }
   };
 
@@ -34,9 +34,9 @@ export const ChatProvider = ({ children }) => {
         setMessages(data.messages);
       }
     } catch (error) {
-      console.error(error.message);
-      toast.error(error.message);
-    }
+  console.error(error.message);
+  toast.error(error.response?.data?.message || 'Failed to load messages');
+}
   };
 
   // function to send message to selected user
@@ -58,9 +58,9 @@ export const ChatProvider = ({ children }) => {
         toast.error(data.message);
       }
     } catch (error) {
-      console.error(error.message);
-      toast.error(error.message);
-    }
+  console.error(error.message);
+  toast.error(error.response?.data?.message || 'Failed to send message');
+}
   };
 
   // function to subscribe to message for selected user

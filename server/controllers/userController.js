@@ -36,7 +36,9 @@ export const signup = async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.json({ success: false, message: 'Account created successfully' });
+    res
+      .status(500)
+      .json({ success: false, message: 'Failed to create account' });
   }
 };
 
@@ -70,6 +72,6 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error.message);
-    res.json({ success: false, message: 'User logged in successfully' });
+    res.status(500).json({ success: false, message: 'Login failed' });
   }
 };

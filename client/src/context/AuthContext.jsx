@@ -102,9 +102,9 @@ export const AuthProvider = ({ children }) => {
       transports: ['websocket', 'polling'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
+      forceNew: true,
     });
 
-     
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
