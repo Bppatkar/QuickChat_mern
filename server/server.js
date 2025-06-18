@@ -14,10 +14,7 @@ const server = http.createServer(app);
 // initializing socket.io
 export const io = new Server(server, {
   cors: {
-    origin: [
-      'https://quick-chat-backend-ecru.vercel.app',
-      'http://localhost:5173',
-    ],
+    origin: '*',
     methods: ['GET', 'POST'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -57,7 +54,7 @@ io.on('connection', (socket) => {
 // middlewares
 app.use(
   cors({
-    origin: 'https://quick-chat-backend-ecru.vercel.app',
+    origin: 'https://quick-chat-mern.vercel.app',
     credentials: true,
   })
 );
@@ -83,4 +80,3 @@ if (process.env.NODE_ENV !== 'production') {
 
 // export server for vercel
 export default server;
-
