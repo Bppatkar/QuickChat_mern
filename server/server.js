@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 // initializing socket.io
 export const io = new Server(server, {
-  cors: { origin: '*' },
+  cors: { origin: '*', credentials: true },
   path: '/api/socket.io/',
   transports: ['websocket', 'polling'],
 });

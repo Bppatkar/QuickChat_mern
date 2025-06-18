@@ -99,10 +99,15 @@ export const AuthProvider = ({ children }) => {
     const newSocket = io(backendUrl, {
       query: { userId: userData._id },
       path: '/api/socket.io/',
-      transports: ['websocket', 'polling'],
+      transports: ['websocket'],
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       forceNew: true,
+      withCredentials: true,
+    });
+
+    newSocket.on('connect_error', (error) => {
+      console.error('Socket connection error:', error);
     });
 
     setSocket(newSocket);
