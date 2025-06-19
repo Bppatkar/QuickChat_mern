@@ -101,6 +101,9 @@ export const AuthProvider = ({ children }) => {
     });
 
     setSocket(newSocket);
+    newSocket.on('getOnlineUsers', (userIds) => {
+      setOnlineUsers(userIds);
+    });
   };
 
   useEffect(() => {
