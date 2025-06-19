@@ -49,16 +49,8 @@ pie
 
 
 -----
-## Proejct Structure
-quickchat/
-├── client/               # React Frontend
-│   ├── src/              # Source files
-│   └── dist/             # Production build
-└── server/               # Node.js Backend
-    ├── controllers/      # Route handlers
-    ├── models/           # MongoDB schemas
-    ├── routes/           # API endpoints
-    └── server.js         # Entry point
+![image](https://github.com/user-attachments/assets/45dd5847-7ca6-4d96-8d70-75324efd4c02)
+
 
 ![image](https://github.com/user-attachments/assets/cec77199-84f0-427f-b009-1b819c9e829f)
 
