@@ -27,14 +27,15 @@ Real-time chat application built with:
 
 ## 🛠️ Tech Stack
 ### Frontend
-```mermaid
-pie
-    title Frontend Technologies
-    "React" : 35
-    "Vite" : 15
-    "Tailwind CSS" : 25
-    "Socket.IO Client" : 15
-    "Axios" : 10
+┌───────────────┐
+│ Frontend Tech │
+├───────────────┤
+│ React         █████████████ (35%)
+│ Vite          ███████ (15%)  
+│ Tailwind CSS  ███████████ (25%)
+│ Socket.IO     ███████ (15%)
+│ Axios         ████ (10%)
+└───────────────┘
 
 ![image](https://github.com/user-attachments/assets/c057a3e5-b6c5-486f-8161-061659eba3fd)
 
