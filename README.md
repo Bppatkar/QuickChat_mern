@@ -37,7 +37,16 @@ pie
     "Axios" : 10
 ```
 
-![image](https://github.com/user-attachments/assets/c057a3e5-b6c5-486f-8161-061659eba3fd)
+```mermaid
+pie
+    title Backend Technologies
+    "Node.js" : 30
+    "Express" : 25
+    "MongoDB" : 20
+    "Socket.IO" : 15
+    "Cloudinary" : 10
+```
+
 
 -----
 ## Proejct Structure
